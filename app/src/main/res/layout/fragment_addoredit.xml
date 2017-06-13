@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="5dp">
+
+    <com.makeramen.roundedimageview.RoundedImageView
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/imgFragAddOrEdit_Image"
+        android:layout_height="120dp"
+        android:layout_width="120dp"
+        android:src="@mipmap/ic_launcher"
+        app:riv_mutate_background="true"
+        app:riv_corner_radius="50dip"
+        app:riv_oval="true"
+        android:scaleType="centerCrop"
+        android:layout_gravity="center"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="10dp"
+        android:layout_marginTop="20dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:text="@string/txt_place_name"/>
+
+        <EditText
+            android:id="@+id/edtFragAddOrEdit_PlaceName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:textSize="14sp"
+            android:text="@string/txt_place_address"/>
+        <EditText
+            android:id="@+id/edtFragAddOrEdit_PlaceAddress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            />
+
+        <Button
+            android:id="@+id/btnFragAddOrEdit_Save"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="?android:attr/selectableItemBackground"
+            android:text="@string/btb_save"
+            android:textSize="20sp"
+            />
+
+    </LinearLayout>
+
+</LinearLayout>

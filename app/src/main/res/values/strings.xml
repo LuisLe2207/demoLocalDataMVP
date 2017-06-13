@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">LocalDBwithMVP</string>
+    <string name="txt_no_data">No Data Available</string>
+    <string name="txt_place_name">Place Name</string>
+    <string name="txt_place_address">Place Address</string>
+    <string name="btb_save">Save</string>
+    <string name="txt_saving_dialog">Saving &#8230;</string>
+</resources>
