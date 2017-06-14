@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="5dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.makeramen.roundedimageview.RoundedImageView
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/imgFragDetail_Image"
+            android:layout_height="120dp"
+            android:layout_width="120dp"
+            android:src="@mipmap/ic_launcher"
+            app:riv_mutate_background="true"
+            app:riv_corner_radius="50dip"
+            app:riv_oval="true"
+            android:scaleType="centerCrop"
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:weightSum="4">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"></LinearLayout>
+
+            <ImageButton
+                android:id="@+id/ibtnFragDetail_FindRoute"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:src="@mipmap/ic_direction"
+                android:background="?android:selectableItemBackground"
+                />
+
+
+            <ImageButton
+                android:id="@+id/ibtnFragDetail_Delete"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:src="@mipmap/ic_delete"
+                android:background="?android:selectableItemBackground"
+                />
+
+            <ImageButton
+                android:id="@+id/ibtnFragDetail_Edit"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:src="@mipmap/ic_edit"
+                android:background="?android:selectableItemBackground"
+                />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/txt_place_name"
+            android:textSize="14sp" />
+
+        <EditText
+            android:id="@+id/edtFragDetail_PlaceName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:inputType="none"
+            android:enabled="false"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="@string/txt_place_address"
+            android:textSize="14sp" />
+
+        <EditText
+            android:id="@+id/edtFragDetail_PlaceAddress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:inputType="none"
+            android:enabled="false"/>
+
+    </LinearLayout>
+
+
+    <!--<com.google.android.gms.maps.MapView-->
+        <!--android:id="@+id/mvFragDetail_Map"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent">-->
+
+    <!--</com.google.android.gms.maps.MapView>-->
+
+</LinearLayout>

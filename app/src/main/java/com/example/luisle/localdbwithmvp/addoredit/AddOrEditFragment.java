@@ -1,9 +1,11 @@
 package com.example.luisle.localdbwithmvp.addoredit;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -19,6 +21,7 @@ import com.example.luisle.localdbwithmvp.dbmodel.Place;
 import com.example.luisle.localdbwithmvp.place.PlaceFragment;
 import com.makeramen.roundedimageview.RoundedImageView;
 
+import static android.app.Activity.RESULT_OK;
 import static com.example.luisle.localdbwithmvp.ActivityUtils.ADD_EDIT_FRAGMENT_TAG;
 import static com.example.luisle.localdbwithmvp.ActivityUtils.PLACE_FRAGMENT_TAG;
 import static com.example.luisle.localdbwithmvp.ActivityUtils.imageViewToByte;
@@ -37,6 +40,8 @@ public class AddOrEditFragment extends Fragment implements AddOrEditContract.Vie
     private Button btnSave;
 
     private ProgressDialog progressDialog;
+
+    public static final int REQUEST_IMAGE_CAPTURE = 1;
 
     public static AddOrEditFragment getInstance() {
         return new AddOrEditFragment();
@@ -71,6 +76,13 @@ public class AddOrEditFragment extends Fragment implements AddOrEditContract.Vie
             }
         });
 
+        imgPlace.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                presenter.openCamera();
+            }
+        });
+
         return root;
     }
 
@@ -78,6 +90,15 @@ public class AddOrEditFragment extends Fragment implements AddOrEditContract.Vie
     public void onResume() {
         super.onResume();
         presenter.start();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK && data !=null) {
+            Bundle extras = data.getExtras();
+            Bitmap imageBitmap = (Bitmap) extras.get("data");
+            imgPlace.setImageBitmap(imageBitmap);
+        }
     }
 
     @Override
@@ -93,9 +114,9 @@ public class AddOrEditFragment extends Fragment implements AddOrEditContract.Vie
         if (addOrEditFragment != null) {
             transaction.remove(addOrEditFragment);
         }
-        transaction.show(placeFragment).commit();
+        transaction.show(placeFragment);
         placeFragment.updateUI();
-
+        transaction.commit();
     }
 
     @Override
@@ -110,6 +131,12 @@ public class AddOrEditFragment extends Fragment implements AddOrEditContract.Vie
 
         edtPlaceName.setText(place.getPlaceName());
         edtPlaceAddress.setText(place.getPlaceAddress());
+    }
+
+    @Override
+    public void showCamera() {
+        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(cameraIntent, REQUEST_IMAGE_CAPTURE);
     }
 
     @Override

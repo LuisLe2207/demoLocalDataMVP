@@ -1,54 +1,42 @@
-package com.example.luisle.localdbwithmvp.addoredit;
+package com.example.luisle.localdbwithmvp.placedetail;
 
 import android.os.Handler;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
 import com.example.luisle.localdbwithmvp.data.IPlaceDataSource;
 import com.example.luisle.localdbwithmvp.data.PlaceRepository;
 import com.example.luisle.localdbwithmvp.dbmodel.Place;
 
 /**
- * Created by LuisLe on 6/13/2017.
+ * Created by LuisLe on 6/14/2017.
  */
 
-public class AddOrEditPresenter implements AddOrEditContract.Presenter, IPlaceDataSource.GetPlaceCallback {
+public class PlaceDetailPresenter implements PlaceDetailContract.Presenter, IPlaceDataSource.GetPlaceCallback {
 
     private final PlaceRepository placeRepository;
 
-    private final AddOrEditContract.View view;
+    private final PlaceDetailContract.View view;
 
-    @Nullable
+    @NonNull
     private String placeID;
 
-    public AddOrEditPresenter(PlaceRepository placeRepository, AddOrEditContract.View view, String placeID) {
+    public PlaceDetailPresenter(PlaceRepository placeRepository, PlaceDetailContract.View view, String placeID) {
         this.placeRepository = placeRepository;
         this.view = view;
         this.placeID = placeID;
         this.view.setPresenter(this);
     }
 
-    private boolean isNewPlace() {
-        return placeID == null;
-    }
-
     @Override
     public void start() {
-        if (!isNewPlace()) {
-            populatePlace();
-        }
+        populatePlace();
     }
 
+
     @Override
-    public void save(@NonNull String placeName, @NonNull String placeAddress, @Nullable byte[] placeImage) {
+    public void deletePlace() {
         view.showProgressDlg();
-        if (placeID == null) {
-            Place place = new Place(placeName, placeAddress, placeImage);
-            placeRepository.addPlace(place);
-        } else {
-            Place place = new Place(placeID, placeName, placeAddress, placeImage);
-            placeRepository.updatePlace(place);
-        }
+        placeRepository.deletePlace(placeID);
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -56,6 +44,10 @@ public class AddOrEditPresenter implements AddOrEditContract.Presenter, IPlaceDa
                 view.showPlaces();
             }
         }, 2000);
+    }
+
+    @Override
+    public void findRoute(@NonNull Place place) {
 
     }
 
@@ -65,8 +57,13 @@ public class AddOrEditPresenter implements AddOrEditContract.Presenter, IPlaceDa
     }
 
     @Override
-    public void openCamera() {
-        view.showCamera();
+    public void openEditPlaceUi() {
+        view.showPlaceEditUi(placeID);
+    }
+
+    @Override
+    public void openDeleteAlertDlg() {
+        view.showAlertDlg();
     }
 
     @Override

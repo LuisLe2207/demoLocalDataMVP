@@ -20,11 +20,14 @@ import com.example.luisle.localdbwithmvp.addoredit.AddOrEditFragment;
 import com.example.luisle.localdbwithmvp.addoredit.AddOrEditPresenter;
 import com.example.luisle.localdbwithmvp.data.Injection;
 import com.example.luisle.localdbwithmvp.dbmodel.Place;
+import com.example.luisle.localdbwithmvp.placedetail.PlaceDetailFragment;
+import com.example.luisle.localdbwithmvp.placedetail.PlaceDetailPresenter;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static com.example.luisle.localdbwithmvp.ActivityUtils.ADD_EDIT_FRAGMENT_TAG;
+import static com.example.luisle.localdbwithmvp.ActivityUtils.DETAIL_FRAGMENT_TAG;
 import static com.example.luisle.localdbwithmvp.ActivityUtils.PLACE_FRAGMENT_TAG;
 
 /**
@@ -92,15 +95,14 @@ public class PlaceFragment extends Fragment implements PlaceContract.View, Place
 
     @Override
     public void showAddPlaceUi() {
-//        AddOrEditFragment addOrEditFragment = AddOrEditFragment.getInstance();
-//        PlaceFragment placeFragment = (PlaceFragment) getActivity().getSupportFragmentManager().findFragmentByTag(PLACE_FRAGMENT_TAG);
-//        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-//        if (placeFragment != null) {
-//            transaction.hide(placeFragment);
-//        }
-//        transaction.replace(android.R.id.content, addOrEditFragment, ADD_EDIT_FRAGMENT_TAG).addToBackStack(null).commit();
-//        AddOrEditPresenter presenter = new AddOrEditPresenter(Injection.providePlaceRepository(getContext()), addOrEditFragment, null);
-        openAddEditUI(null);
+        AddOrEditFragment addOrEditFragment = AddOrEditFragment.getInstance();
+        PlaceFragment placeFragment = (PlaceFragment) getActivity().getSupportFragmentManager().findFragmentByTag(PLACE_FRAGMENT_TAG);
+        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+        if (placeFragment != null) {
+            transaction.hide(placeFragment);
+        }
+        transaction.replace(android.R.id.content, addOrEditFragment, ADD_EDIT_FRAGMENT_TAG).addToBackStack(null).commit();
+        AddOrEditPresenter presenter = new AddOrEditPresenter(Injection.providePlaceRepository(getContext()), addOrEditFragment, null);
     }
 
     @Override
@@ -116,17 +118,15 @@ public class PlaceFragment extends Fragment implements PlaceContract.View, Place
 
     @Override
     public void showPlaceDetailUi(@NonNull String placeID) {
-        openAddEditUI(placeID);
-    }
 
-    private void openAddEditUI(@Nullable String placeID) {
-        AddOrEditFragment addOrEditFragment = AddOrEditFragment.getInstance();
+        PlaceDetailFragment placeDetailFragment = PlaceDetailFragment.getInstance();
         PlaceFragment placeFragment = (PlaceFragment) getActivity().getSupportFragmentManager().findFragmentByTag(PLACE_FRAGMENT_TAG);
         FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
         if (placeFragment != null) {
             transaction.hide(placeFragment);
         }
-        transaction.replace(android.R.id.content, addOrEditFragment, ADD_EDIT_FRAGMENT_TAG).addToBackStack(null).commit();
-        AddOrEditPresenter presenter = new AddOrEditPresenter(Injection.providePlaceRepository(getContext()), addOrEditFragment, placeID);
+        transaction.replace(android.R.id.content, placeDetailFragment, DETAIL_FRAGMENT_TAG).addToBackStack(null).commit();
+        PlaceDetailPresenter presenter = new PlaceDetailPresenter(Injection.providePlaceRepository(getContext()), placeDetailFragment, placeID);
     }
+
 }
