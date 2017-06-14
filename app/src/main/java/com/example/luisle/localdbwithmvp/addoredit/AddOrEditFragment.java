@@ -20,10 +20,10 @@ import android.widget.EditText;
 import com.example.luisle.localdbwithmvp.ActivityUtils;
 import com.example.luisle.localdbwithmvp.R;
 import com.example.luisle.localdbwithmvp.dbmodel.Place;
-import com.example.luisle.localdbwithmvp.place.PlaceFragment;
 import com.makeramen.roundedimageview.RoundedImageView;
 
 import static android.app.Activity.RESULT_OK;
+import static com.example.luisle.localdbwithmvp.ActivityUtils.DETAIL_FRAGMENT_TAG;
 import static com.example.luisle.localdbwithmvp.ActivityUtils.PLACE_FRAGMENT_TAG;
 import static com.example.luisle.localdbwithmvp.ActivityUtils.imageViewToByte;
 
@@ -115,17 +115,23 @@ public class AddOrEditFragment extends Fragment implements AddOrEditContract.Vie
     }
 
     @Override
-    public void showPlaces() {
-        //AddOrEditFragment addOrEditFragment = (AddOrEditFragment) getActivity().getSupportFragmentManager().findFragmentByTag(ADD_EDIT_FRAGMENT_TAG);
-        PlaceFragment placeFragment = (PlaceFragment) getActivity().getSupportFragmentManager().findFragmentByTag(PLACE_FRAGMENT_TAG);
+    public void redirectUI(boolean result) {
+        Fragment resultFragment;
+        String tag;
+        if (result) {
+            resultFragment =  getActivity().getSupportFragmentManager().findFragmentByTag(PLACE_FRAGMENT_TAG);
+            tag = PLACE_FRAGMENT_TAG;
+        } else {
+            resultFragment =  getActivity().getSupportFragmentManager().findFragmentByTag(DETAIL_FRAGMENT_TAG);
+            tag = DETAIL_FRAGMENT_TAG;
+        }
         FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-//        if (addOrEditFragment != null) {
-//            transaction.remove(addOrEditFragment);
-//        }
         transaction.setCustomAnimations(R.anim.slide_in, R.anim.slide_out);
-        transaction.replace(R.id.layout, placeFragment, PLACE_FRAGMENT_TAG);
-        //transaction.show(placeFragment);
-        placeFragment.updateUI();
+        transaction.replace(R.id.layout, resultFragment, tag);
+        if (!result) {
+            getActivity().getSupportFragmentManager().popBackStack();
+        }
+        resultFragment.onResume();
         transaction.commit();
     }
 

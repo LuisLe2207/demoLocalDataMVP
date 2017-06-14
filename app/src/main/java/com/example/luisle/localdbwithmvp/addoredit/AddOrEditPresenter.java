@@ -43,7 +43,7 @@ public class AddOrEditPresenter implements AddOrEditContract.Presenter, IPlaceDa
     @Override
     public void save(@NonNull String placeName, @NonNull String placeAddress, @Nullable byte[] placeImage) {
         view.showProgressDlg();
-        if (placeID == null) {
+        if (isNewPlace()) {
             Place place = new Place(placeName, placeAddress, placeImage);
             placeRepository.addPlace(place);
         } else {
@@ -54,7 +54,7 @@ public class AddOrEditPresenter implements AddOrEditContract.Presenter, IPlaceDa
             @Override
             public void run() {
                 view.hideProgressDlg();
-                view.showPlaces();
+                view.redirectUI(isNewPlace());
             }
         }, 2000);
 

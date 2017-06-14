@@ -13,7 +13,7 @@ import com.example.luisle.localdbwithmvp.dbmodel.Place;
 
 public interface AddOrEditContract {
     interface View extends BaseView<Presenter>, BaseView.ViewProgress {
-        void showPlaces();
+        void redirectUI(boolean result);
         void setData(@NonNull Place place);
         void showCamera();
         void updateActionBarTitle(boolean isAdd);

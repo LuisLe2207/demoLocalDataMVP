@@ -28,6 +28,7 @@ import com.google.android.gms.maps.MapView;
 import com.makeramen.roundedimageview.RoundedImageView;
 
 import static com.example.luisle.localdbwithmvp.ActivityUtils.ADD_EDIT_FRAGMENT_TAG;
+import static com.example.luisle.localdbwithmvp.ActivityUtils.DETAIL_FRAGMENT_TAG;
 import static com.example.luisle.localdbwithmvp.ActivityUtils.PLACE_FRAGMENT_TAG;
 
 /**
@@ -104,7 +105,7 @@ public class PlaceDetailFragment extends Fragment implements PlaceDetailContract
     @Override
     public void showPlaces() {
 
-        //PlaceDetailFragment placeDetailFragment = (PlaceDetailFragment) getActivity().getSupportFragmentManager().findFragmentByTag(DETAIL_FRAGMENT_TAG);
+        PlaceDetailFragment placeDetailFragment = (PlaceDetailFragment) getActivity().getSupportFragmentManager().findFragmentByTag(DETAIL_FRAGMENT_TAG);
         PlaceFragment placeFragment = (PlaceFragment) getActivity().getSupportFragmentManager().findFragmentByTag(PLACE_FRAGMENT_TAG);
         FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
 //        if (placeDetailFragment != null) {
