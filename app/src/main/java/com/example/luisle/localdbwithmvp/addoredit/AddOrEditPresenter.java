@@ -34,6 +34,7 @@ public class AddOrEditPresenter implements AddOrEditContract.Presenter, IPlaceDa
 
     @Override
     public void start() {
+        changeActionBarTitle();
         if (!isNewPlace()) {
             populatePlace();
         }
@@ -67,6 +68,15 @@ public class AddOrEditPresenter implements AddOrEditContract.Presenter, IPlaceDa
     @Override
     public void openCamera() {
         view.showCamera();
+    }
+
+    @Override
+    public void changeActionBarTitle() {
+        if (placeID == null) {
+            view.updateActionBarTitle(true);
+        } else {
+            view.updateActionBarTitle(false);
+        }
     }
 
     @Override

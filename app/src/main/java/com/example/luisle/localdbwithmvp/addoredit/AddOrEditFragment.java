@@ -1,6 +1,7 @@
 package com.example.luisle.localdbwithmvp.addoredit;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -16,13 +17,13 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.example.luisle.localdbwithmvp.ActivityUtils;
 import com.example.luisle.localdbwithmvp.R;
 import com.example.luisle.localdbwithmvp.dbmodel.Place;
 import com.example.luisle.localdbwithmvp.place.PlaceFragment;
 import com.makeramen.roundedimageview.RoundedImageView;
 
 import static android.app.Activity.RESULT_OK;
-import static com.example.luisle.localdbwithmvp.ActivityUtils.ADD_EDIT_FRAGMENT_TAG;
 import static com.example.luisle.localdbwithmvp.ActivityUtils.PLACE_FRAGMENT_TAG;
 import static com.example.luisle.localdbwithmvp.ActivityUtils.imageViewToByte;
 
@@ -34,6 +35,7 @@ public class AddOrEditFragment extends Fragment implements AddOrEditContract.Vie
 
 
     private AddOrEditContract.Presenter presenter;
+    private ActivityUtils.Communicator communicator;
 
     private RoundedImageView imgPlace;
     private EditText edtPlaceName, edtPlaceAddress;
@@ -45,6 +47,12 @@ public class AddOrEditFragment extends Fragment implements AddOrEditContract.Vie
 
     public static AddOrEditFragment getInstance() {
         return new AddOrEditFragment();
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        communicator = (ActivityUtils.Communicator) context;
     }
 
     @Override
@@ -108,13 +116,15 @@ public class AddOrEditFragment extends Fragment implements AddOrEditContract.Vie
 
     @Override
     public void showPlaces() {
-        AddOrEditFragment addOrEditFragment = (AddOrEditFragment) getActivity().getSupportFragmentManager().findFragmentByTag(ADD_EDIT_FRAGMENT_TAG);
+        //AddOrEditFragment addOrEditFragment = (AddOrEditFragment) getActivity().getSupportFragmentManager().findFragmentByTag(ADD_EDIT_FRAGMENT_TAG);
         PlaceFragment placeFragment = (PlaceFragment) getActivity().getSupportFragmentManager().findFragmentByTag(PLACE_FRAGMENT_TAG);
         FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-        if (addOrEditFragment != null) {
-            transaction.remove(addOrEditFragment);
-        }
-        transaction.show(placeFragment);
+//        if (addOrEditFragment != null) {
+//            transaction.remove(addOrEditFragment);
+//        }
+        transaction.setCustomAnimations(R.anim.slide_in, R.anim.slide_out);
+        transaction.replace(R.id.layout, placeFragment, PLACE_FRAGMENT_TAG);
+        //transaction.show(placeFragment);
         placeFragment.updateUI();
         transaction.commit();
     }
@@ -137,6 +147,15 @@ public class AddOrEditFragment extends Fragment implements AddOrEditContract.Vie
     public void showCamera() {
         Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         startActivityForResult(cameraIntent, REQUEST_IMAGE_CAPTURE);
+    }
+
+    @Override
+    public void updateActionBarTitle(boolean isAdd) {
+        if (isAdd) {
+            communicator.setActionBarTitle(getContext().getResources().getString(R.string.action_bar_title_add));
+        } else {
+            communicator.setActionBarTitle(getContext().getResources().getString(R.string.action_bar_title_modify));
+        }
     }
 
     @Override

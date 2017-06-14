@@ -1,5 +1,6 @@
 package com.example.luisle.localdbwithmvp.place;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -12,8 +13,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.example.luisle.localdbwithmvp.ActivityUtils;
 import com.example.luisle.localdbwithmvp.R;
 import com.example.luisle.localdbwithmvp.adapter.PlaceAdapter;
 import com.example.luisle.localdbwithmvp.addoredit.AddOrEditFragment;
@@ -28,7 +29,6 @@ import java.util.List;
 
 import static com.example.luisle.localdbwithmvp.ActivityUtils.ADD_EDIT_FRAGMENT_TAG;
 import static com.example.luisle.localdbwithmvp.ActivityUtils.DETAIL_FRAGMENT_TAG;
-import static com.example.luisle.localdbwithmvp.ActivityUtils.PLACE_FRAGMENT_TAG;
 
 /**
  * Created by LuisLe on 6/13/2017.
@@ -37,6 +37,7 @@ import static com.example.luisle.localdbwithmvp.ActivityUtils.PLACE_FRAGMENT_TAG
 public class PlaceFragment extends Fragment implements PlaceContract.View, PlaceAdapter.OnActionCallback {
 
     private PlaceContract.Presenter presenter;
+    private ActivityUtils.Communicator communicator;
 
     private TextView txtNoData;
     private FloatingActionButton fabAddNew;
@@ -49,9 +50,16 @@ public class PlaceFragment extends Fragment implements PlaceContract.View, Place
     }
 
     @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        communicator = (ActivityUtils.Communicator) context;
+    }
+
+    @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         placeAdapter = new PlaceAdapter(getContext(), new ArrayList<Place>(0), this);
+
     }
 
     @Nullable
@@ -70,8 +78,6 @@ public class PlaceFragment extends Fragment implements PlaceContract.View, Place
             }
         });
 
-        Toast.makeText(getContext(), "Hello", Toast.LENGTH_SHORT).show();
-
         return root;
     }
 
@@ -79,7 +85,7 @@ public class PlaceFragment extends Fragment implements PlaceContract.View, Place
     public void onResume() {
         super.onResume();
         presenter.start();
-
+        communicator.setActionBarTitle(getContext().getResources().getString(R.string.action_bar_title_list));
     }
 
     @Override
@@ -96,18 +102,20 @@ public class PlaceFragment extends Fragment implements PlaceContract.View, Place
     @Override
     public void showAddPlaceUi() {
         AddOrEditFragment addOrEditFragment = AddOrEditFragment.getInstance();
-        PlaceFragment placeFragment = (PlaceFragment) getActivity().getSupportFragmentManager().findFragmentByTag(PLACE_FRAGMENT_TAG);
+        //PlaceFragment placeFragment = (PlaceFragment) getActivity().getSupportFragmentManager().findFragmentByTag(PLACE_FRAGMENT_TAG);
         FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-        if (placeFragment != null) {
-            transaction.hide(placeFragment);
-        }
-        transaction.replace(android.R.id.content, addOrEditFragment, ADD_EDIT_FRAGMENT_TAG).addToBackStack(null).commit();
+//        if (placeFragment != null) {
+//            transaction.hide(placeFragment);
+//        }
+        transaction.setCustomAnimations(R.anim.fade_in, R.anim.fade_out, R.anim.slide_in, R.anim.slide_out);
+        transaction.replace(R.id.layout, addOrEditFragment, ADD_EDIT_FRAGMENT_TAG).addToBackStack(null).commit();
         AddOrEditPresenter presenter = new AddOrEditPresenter(Injection.providePlaceRepository(getContext()), addOrEditFragment, null);
     }
 
     @Override
     public void updateUI() {
         presenter.loadPlaces();
+        communicator.setActionBarTitle(getContext().getResources().getString(R.string.action_bar_title_list));
     }
 
     private void mappingLayout(View root) {
@@ -120,12 +128,13 @@ public class PlaceFragment extends Fragment implements PlaceContract.View, Place
     public void showPlaceDetailUi(@NonNull String placeID) {
 
         PlaceDetailFragment placeDetailFragment = PlaceDetailFragment.getInstance();
-        PlaceFragment placeFragment = (PlaceFragment) getActivity().getSupportFragmentManager().findFragmentByTag(PLACE_FRAGMENT_TAG);
+        //PlaceFragment placeFragment = (PlaceFragment) getActivity().getSupportFragmentManager().findFragmentByTag(PLACE_FRAGMENT_TAG);
         FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-        if (placeFragment != null) {
-            transaction.hide(placeFragment);
-        }
-        transaction.replace(android.R.id.content, placeDetailFragment, DETAIL_FRAGMENT_TAG).addToBackStack(null).commit();
+//        if (placeFragment != null) {
+//            transaction.hide(placeFragment);
+//        }
+        transaction.setCustomAnimations(R.anim.fade_in, R.anim.fade_out, R.anim.slide_in, R.anim.slide_out);
+        transaction.replace(R.id.layout, placeDetailFragment, DETAIL_FRAGMENT_TAG).addToBackStack(null).commit();
         PlaceDetailPresenter presenter = new PlaceDetailPresenter(Injection.providePlaceRepository(getContext()), placeDetailFragment, placeID);
     }
 

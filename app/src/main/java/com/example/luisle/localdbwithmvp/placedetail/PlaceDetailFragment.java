@@ -1,6 +1,7 @@
 package com.example.luisle.localdbwithmvp.placedetail;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -16,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
+import com.example.luisle.localdbwithmvp.ActivityUtils;
 import com.example.luisle.localdbwithmvp.R;
 import com.example.luisle.localdbwithmvp.addoredit.AddOrEditFragment;
 import com.example.luisle.localdbwithmvp.addoredit.AddOrEditPresenter;
@@ -26,7 +28,6 @@ import com.google.android.gms.maps.MapView;
 import com.makeramen.roundedimageview.RoundedImageView;
 
 import static com.example.luisle.localdbwithmvp.ActivityUtils.ADD_EDIT_FRAGMENT_TAG;
-import static com.example.luisle.localdbwithmvp.ActivityUtils.DETAIL_FRAGMENT_TAG;
 import static com.example.luisle.localdbwithmvp.ActivityUtils.PLACE_FRAGMENT_TAG;
 
 /**
@@ -37,6 +38,7 @@ public class PlaceDetailFragment extends Fragment implements PlaceDetailContract
 
 
     private PlaceDetailContract.Presenter presenter;
+    private ActivityUtils.Communicator communicator;
 
     private RoundedImageView imgPlace;
     private ImageButton ibtnFindRoute, ibtnDelete, ibtnEdit;
@@ -47,6 +49,12 @@ public class PlaceDetailFragment extends Fragment implements PlaceDetailContract
 
     public static PlaceDetailFragment getInstance() {
         return new PlaceDetailFragment();
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        communicator = (ActivityUtils.Communicator) context;
     }
 
     @Override
@@ -85,6 +93,7 @@ public class PlaceDetailFragment extends Fragment implements PlaceDetailContract
     public void onResume() {
         super.onResume();
         presenter.start();
+        communicator.setActionBarTitle(getContext().getResources().getString(R.string.action_bar_title_detail));
     }
 
     @Override
@@ -95,13 +104,15 @@ public class PlaceDetailFragment extends Fragment implements PlaceDetailContract
     @Override
     public void showPlaces() {
 
-        PlaceDetailFragment placeDetailFragment = (PlaceDetailFragment) getActivity().getSupportFragmentManager().findFragmentByTag(DETAIL_FRAGMENT_TAG);
+        //PlaceDetailFragment placeDetailFragment = (PlaceDetailFragment) getActivity().getSupportFragmentManager().findFragmentByTag(DETAIL_FRAGMENT_TAG);
         PlaceFragment placeFragment = (PlaceFragment) getActivity().getSupportFragmentManager().findFragmentByTag(PLACE_FRAGMENT_TAG);
         FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-        if (placeDetailFragment != null) {
-            transaction.remove(placeDetailFragment);
-        }
-        transaction.show(placeFragment).commit();
+//        if (placeDetailFragment != null) {
+//            transaction.remove(placeDetailFragment);
+//        }
+        transaction.setCustomAnimations(R.anim.slide_in, R.anim.slide_out);
+        transaction.replace(R.id.layout, placeFragment, PLACE_FRAGMENT_TAG).commit();
+        //transaction.show(placeFragment).commit();
         placeFragment.updateUI();
     }
 
@@ -109,7 +120,8 @@ public class PlaceDetailFragment extends Fragment implements PlaceDetailContract
     public void showPlaceEditUi(@NonNull String placeID) {
         AddOrEditFragment addOrEditFragment = AddOrEditFragment.getInstance();
         FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-        transaction.replace(android.R.id.content, addOrEditFragment, ADD_EDIT_FRAGMENT_TAG).addToBackStack(null).commit();
+        transaction.setCustomAnimations(R.anim.fade_in, R.anim.fade_out, R.anim.slide_in, R.anim.slide_out);
+        transaction.replace(R.id.layout, addOrEditFragment, ADD_EDIT_FRAGMENT_TAG).addToBackStack(null).commit();
         AddOrEditPresenter presenter = new AddOrEditPresenter(Injection.providePlaceRepository(getContext()), addOrEditFragment, placeID);
 
     }

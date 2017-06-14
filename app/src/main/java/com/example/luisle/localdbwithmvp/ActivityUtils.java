@@ -1,6 +1,7 @@
 package com.example.luisle.localdbwithmvp;
 
 import android.graphics.Bitmap;
+import android.support.annotation.NonNull;
 import android.widget.ImageView;
 
 import com.makeramen.roundedimageview.RoundedDrawable;
@@ -24,5 +25,10 @@ public class ActivityUtils {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
         return stream.toByteArray();
+    }
+
+
+    public interface Communicator {
+        void setActionBarTitle(@NonNull String title);
     }
 }

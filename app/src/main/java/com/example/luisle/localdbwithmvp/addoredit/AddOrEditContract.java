@@ -16,11 +16,13 @@ public interface AddOrEditContract {
         void showPlaces();
         void setData(@NonNull Place place);
         void showCamera();
+        void updateActionBarTitle(boolean isAdd);
     }
 
     interface Presenter extends BasePresenter {
         void save(@NonNull String placeName, @NonNull  String placeAddress, @Nullable byte[] placeImage);
         void populatePlace();
         void openCamera();
+        void changeActionBarTitle();
     }
 }
